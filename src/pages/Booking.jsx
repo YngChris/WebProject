@@ -83,21 +83,8 @@ export default function Booking() {
         templateParams,
         "ryrpoSP2GGj1MADwF"
       )
-      // Send WhatsApp notification to admin
-    await fetch(
-      "https://pkbtkzzhnldtciedncna.supabase.co/functions/v1/notify-admin",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          service: selectedService.name,
-          date: selectedDate.toDateString(),
-          time: selectedTime,
-          phone: formData.phone,
-        }),
-      }
-    )
+
+      
     } catch (emailError) {
       console.error("Email failed:", emailError)
     }
