@@ -16,7 +16,7 @@ export default function Navbar() {
   return (
     <nav className="bg-black text-white px-8 py-4 flex justify-between items-center">
       <Link to="/">
-        <h1 className="text-2xl text-gold tracking-widest font-elegant">LuxeNails</h1>
+        <h1 className="text-2xl text-gold tracking-widest font-elegant">PinkStudio</h1>
       </Link>
 
       {/* Desktop Links */}
@@ -35,7 +35,6 @@ export default function Navbar() {
           </li>
         ) : (
           <li>
-            <Link to="/login" className="hover:text-gold transition-colors">Login</Link>
           </li>
         )}
         <li>

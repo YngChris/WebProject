@@ -81,7 +81,7 @@ export default function AdminDashboard() {
 
       {/* Top Bar */}
       <div className="bg-black border-b border-gray-800 px-8 py-4 flex justify-between items-center">
-        <h1 className="font-elegant text-2xl text-gold">LuxeNails Admin</h1>
+        <h1 className="font-elegant text-2xl text-gold">PinkStudio Admin</h1>
         <button
           onClick={handleLogout}
           className="text-gray-400 text-sm hover:text-gold transition"

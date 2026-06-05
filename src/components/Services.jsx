@@ -2,37 +2,16 @@ const services = [
   {
     title: "Classic Manicure",
     description: "A timeless treatment including shaping, cuticle care, and polish.",
-    price: "GH₵ 80",
-    image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=300&fit=crop",
+    image: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/services/Eyelash.jpeg",
   },
   {
     title: "Gel Nails",
     description: "Long-lasting gel polish that stays flawless for up to 3 weeks.",
-    price: "GH₵ 150",
-    image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=300&fit=crop",
+    image: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/services/Nail.jpeg",
   },
   {
     title: "Acrylic Extensions",
     description: "Full set of acrylic nails customized to your desired length and shape.",
-    price: "GH₵ 200",
-    image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=300&fit=crop",
-  },
-  {
-    title: "Nail Art",
-    description: "Creative designs, patterns, and embellishments for a unique look.",
-    price: "GH₵ 50+",
-    image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=300&fit=crop",
-  },
-  {
-    title: "Pedicure",
-    description: "Relaxing foot soak, exfoliation, shaping, and polish application.",
-    price: "GH₵ 100",
-    image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=300&fit=crop",
-  },
-  {
-    title: "Spa Package",
-    description: "Full mani-pedi combo with scrub, massage, and premium polish.",
-    price: "GH₵ 280",
     image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=300&fit=crop",
   },
 ]
@@ -53,7 +32,7 @@ export default function Services() {
       </div>
 
       {/* Cards Grid */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="max-w-8x2 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {services.map((service, index) => (
           <div
             key={index}

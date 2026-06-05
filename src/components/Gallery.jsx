@@ -1,26 +1,38 @@
 const photos = [
   {
-    src: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&h=600&fit=crop",
+    src: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/gallery/WhatsApp%20Image%202026-06-04%20at%2011.39.14%20AM.jpeg",
     alt: "Nail design 1",
   },
   {
-    src: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&h=600&fit=crop",
+    src: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/gallery/WhatsApp%20Image%202026-06-04%20at%2011.19.83%20AM.jpeg",
     alt: "Nail design 2",
   },
   {
-    src: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&h=600&fit=crop",
+    src: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/gallery/WhatsApp%20Image%202026-06-04%20at%2011.19.14%20AM.jpeg",
     alt: "Nail design 3",
   },
   {
-    src: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&h=600&fit=crop",
+    src: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/gallery/WhatsApp%20Image%202026-06-04%20at%2011.19.13%20AM.jpeg",
     alt: "Nail design 4",
   },
   {
-    src: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&h=600&fit=crop",
+    src: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/gallery/WhatsApp%20Image%202026-06-04%20at%2011.19.12%20AM.jpeg",
     alt: "Nail design 5",
   },
   {
-    src: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=600&h=600&fit=crop",
+    src: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/gallery/WhatsApp%20Image%202026-06-04%20at%2011.19.10%20AM.jpeg",
+    alt: "Nail design 6",
+  },
+  {
+    src: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/gallery/WhatsApp%20Image%202026-06-04%20at%2011.19.09%20AM.jpeg",
+    alt: "Nail design 6",
+  },
+  {
+    src: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/gallery/WhatsApp%20Image%202026-06-04%20at%2011.19.05%20AM.jpeg",
+    alt: "Nail design 6",
+  },
+  {
+    src: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/gallery/Eyelash.jpeg",
     alt: "Nail design 6",
   },
 ]
@@ -41,7 +53,7 @@ export default function Gallery() {
       </div>
 
       {/* Grid */}
-      <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-3">
         {photos.map((photo, index) => (
           <div key={index} className="overflow-hidden rounded-lg group">
             <img

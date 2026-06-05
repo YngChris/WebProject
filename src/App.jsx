@@ -8,6 +8,7 @@ import Register from "./pages/Register"
 import Account from "./pages/Account"
 import Login from "./pages/Login"
 import Services from "./pages/Services"
+import Gallery from "./components/Gallery"
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/login" element={<Login />} />
         <Route path="/services" element={<Services />} />
+        <Route path="/gallery" element={<Gallery />} />
       </Routes>
     </BrowserRouter>
   )

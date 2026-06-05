@@ -43,7 +43,7 @@ export default function AdminLogin() {
       <div className="border border-gray-800 rounded-lg p-10 w-full max-w-md">
 
         <div className="text-center mb-8">
-          <h1 className="font-elegant text-3xl text-gold mb-2">LuxeNails</h1>
+          <h1 className="font-elegant text-3xl text-gold mb-2">PinkStudio</h1>
           <p className="text-gray-400 text-sm tracking-widest uppercase">Admin Portal</p>
         </div>
 
