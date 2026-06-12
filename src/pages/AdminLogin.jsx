@@ -1,6 +1,9 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { AnimatePresence, motion } from "framer-motion"
 import { supabase } from "../supabaseClient"
+import { FadeInOnMount } from "../components/animations/AnimateIn"
+import PageShell from "../components/PageShell"
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("")
@@ -28,7 +31,7 @@ export default function AdminLogin() {
     }
 
     // Check if the logged in user is the admin
-    const adminEmail = "chriiisybumpkin@gmail.com" // change to client's email
+    const adminEmail = import.meta.env.VITE_ADMIN_EMAIL
     if (data.user.email !== adminEmail) {
       await supabase.auth.signOut()
       setError("You are not authorized to access this page.")
@@ -39,19 +42,27 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="bg-black min-h-screen flex justify-center items-center px-6">
-      <div className="border border-gray-800 rounded-lg p-10 w-full max-w-md">
+    <PageShell variant="admin-login" theme="dark" className="min-h-screen flex justify-center items-center px-6 text-white">
+      <FadeInOnMount>
+      <div className="bg-black/50 backdrop-blur-md border border-gold/20 rounded-lg p-10 w-full max-w-md shadow-xl">
 
         <div className="text-center mb-8">
           <h1 className="font-elegant text-3xl text-gold mb-2">PinkStudio</h1>
           <p className="text-gray-400 text-sm tracking-widest uppercase">Admin Portal</p>
         </div>
 
+        <AnimatePresence>
         {error && (
-          <div className="bg-red-900/30 border border-red-500 text-red-400 text-sm px-4 py-3 rounded mb-6">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="bg-red-900/30 border border-red-500 text-red-400 text-sm px-4 py-3 rounded mb-6"
+          >
             {error}
-          </div>
+          </motion.div>
         )}
+        </AnimatePresence>
 
         <div className="space-y-4">
           <div>
@@ -85,6 +96,7 @@ export default function AdminLogin() {
         </button>
 
       </div>
-    </div>
+      </FadeInOnMount>
+    </PageShell>
   )
 }

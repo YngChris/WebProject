@@ -1,3 +1,6 @@
+import { FadeIn, StaggerContainer, StaggerItem } from "./animations/AnimateIn"
+import DoodleWallpaper from "./DoodleWallpaper"
+
 const testimonials = [
   {
     name: "Ama Owusu",
@@ -18,10 +21,10 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="bg-white py-20 px-6">
+    <section className="relative py-20 px-6 overflow-hidden">
+      <DoodleWallpaper variant="home-testimonials" theme="light" />
 
-      {/* Header */}
-      <div className="text-center mb-14">
+      <FadeIn className="relative z-10 text-center mb-14">
         <p className="text-gold tracking-[0.3em] text-sm uppercase mb-2">
           Happy Clients
         </p>
@@ -29,22 +32,23 @@ export default function Testimonials() {
           Testimonials
         </h2>
         <div className="w-16 h-0.5 bg-gold mx-auto mt-4"></div>
-      </div>
+      </FadeIn>
 
-      {/* Cards */}
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+      <StaggerContainer className="relative z-10 max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
         {testimonials.map((t, index) => (
-          <div key={index} className="border border-gray-100 rounded-lg p-8 hover:shadow-lg transition-all duration-300">
-            <div className="text-gold text-2xl mb-4">
-              {"★".repeat(t.rating)}
+          <StaggerItem key={index}>
+            <div className="bg-white/85 backdrop-blur-sm border border-white/60 rounded-lg p-8 hover:shadow-lg transition-all duration-300 h-full">
+              <div className="text-gold text-2xl mb-4">
+                {"★".repeat(t.rating)}
+              </div>
+              <p className="text-gray-500 text-sm leading-relaxed mb-6 italic">
+                "{t.review}"
+              </p>
+              <p className="font-elegant text-black font-semibold">— {t.name}</p>
             </div>
-            <p className="text-gray-500 text-sm leading-relaxed mb-6 italic">
-              "{t.review}"
-            </p>
-            <p className="font-elegant text-black font-semibold">— {t.name}</p>
-          </div>
+          </StaggerItem>
         ))}
-      </div>
+      </StaggerContainer>
 
     </section>
   )

@@ -1,78 +1,57 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-
-const services = [
-  {
-    title: "Classic Manicure",
-    description: "A timeless treatment including shaping, cuticle care, and polish.",
-    fullDescription: "Our Classic Manicure is the perfect way to maintain healthy, beautiful nails. The treatment includes nail shaping and filing, cuticle care and moisturizing, a relaxing hand massage, and your choice of polish color from our extensive collection. Ideal for those who love a clean, polished look.",
-    duration: "45 mins",
-    image: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/service-page/WhatsApp%20Image%202026-06-04%20at%2011.19.10%20AM.jpeg",
-    includes: ["Nail shaping & filing", "Cuticle care", "Hand massage", "Polish of choice"],
-  },
-  {
-    title: "Gel Nails",
-    description: "Long-lasting gel polish that stays flawless for up to 3 weeks.",
-    fullDescription: "Our Gel Nails service uses premium gel polish that stays chip-free and glossy for up to 3 weeks. Perfect for busy people who want low-maintenance beautiful nails. The gel is cured under UV light for a hard, durable finish that won't smudge or fade.",
-    duration: "60 mins",
-    image: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/service-page/WhatsApp%20Image%202026-06-04%20at%2011.19.13%20AM.jpeg",
-    includes: ["Nail prep & shaping", "Base coat", "Gel color application", "UV curing", "Top coat"],
-  },
-  {
-    title: "Acrylic Extensions",
-    description: "Full set of acrylic nails customized to your desired length and shape.",
-    fullDescription: "Transform your nails with our Acrylic Extensions service. We apply a full set of acrylic nails customized to your desired length, shape, and style. Whether you want coffin, stiletto, almond, or square — we've got you covered. Great for adding strength and length to natural nails.",
-    duration: "90 mins",
-    image: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/service-page/WhatsApp%20Image%202026-06-04%20at%2011.19.14%20AM.jpeg",
-    includes: ["Nail prep", "Acrylic application", "Shaping & filing", "Polish or gel finish", "Cuticle care"],
-  },
-  {
-    title: "Nail Art",
-    description: "Creative designs, patterns, and embellishments for a unique look.",
-    fullDescription: "Express your personality with our custom Nail Art service. From minimalist designs to bold statement nails, our skilled technicians bring your vision to life. We offer freehand art, stamping patterns, gradient/ombre effects, gems, and embellishments.",
-    duration: "30 mins+",
-    image: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/service-page/WhatsApp%20Image%202026-06-04%20at%2011.19.83%20AM.jpeg",
-    includes: ["Custom designs", "Freehand art", "Gems & embellishments", "Stamping patterns", "Gradient/ombre"],
-  },
-  {
-    title: "Pedicure",
-    description: "Relaxing foot soak, exfoliation, shaping, and polish application.",
-    fullDescription: "Treat your feet to our luxurious Pedicure service. We begin with a relaxing warm foot soak, followed by exfoliation to remove dead skin, nail shaping, cuticle care, and a moisturizing massage. Finished with your choice of polish for perfectly pampered feet.",
-    duration: "60 mins",
-    image: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/service-page/WhatsApp%20Image%202026-06-04%20at%2011.39.14%20AM.jpeg",
-    includes: ["Foot soak", "Exfoliation scrub", "Nail shaping", "Cuticle care", "Polish of choice"],
-  },
-  {
-    title: "Spa Package",
-    description: "Full mani-pedi combo with scrub, massage, and premium polish.",
-    fullDescription: "The ultimate luxury nail experience. Our Spa Package combines a full manicure and pedicure with premium scrubs, extended massages, and your choice of gel or regular polish. Perfect for a self-care day or a special treat. This is the complete LuxeNails experience.",
-    duration: "120 mins",
-    image: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/service-page/WhatsApp%20Image%202026-96-04%20at%2011.19.13%20AM.jpeg",
-    includes: ["Full manicure", "Full pedicure", "Premium scrub", "Extended massage", "Gel or regular polish"],
-  },
-]
+import { AnimatePresence, motion } from "framer-motion"
+import { supabase } from "../supabaseClient"
+import { FadeIn, StaggerContainer, StaggerItem } from "../components/animations/AnimateIn"
+import { formatPrice } from "../utils/formatPrice"
+import PageShell from "../components/PageShell"
 
 export default function Services() {
+  const [services, setServices] = useState([])
   const [selectedService, setSelectedService] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      const { data, error } = await supabase
+        .from("services")
+        .select("*")
+        .order("created_at", { ascending: true })
+      
+      if (!error && data) {
+        setServices(data)
+      }
+      setLoading(false)
+    }
+    fetchServices()
+  }, [])
+
+  if (loading) {
+    return (
+      <PageShell variant="services" theme="light" className="min-h-screen flex items-center justify-center">
+        <FadeIn>
+          <p className="text-gray-400">Loading services...</p>
+        </FadeIn>
+      </PageShell>
+    )
+  }
 
   return (
-    <div className="bg-white min-h-screen">
+    <PageShell variant="services" theme="light" className="min-h-screen">
 
-      {/* Header */}
-      <div className="text-center py-16 px-6">
+      <FadeIn className="text-center py-16 px-6">
         <p className="text-gold tracking-[0.3em] text-sm uppercase mb-2">What We Offer</p>
         <h1 className="font-elegant text-4xl md:text-5xl text-black">Our Services</h1>
         <div className="w-16 h-0.5 bg-gold mx-auto mt-4"></div>
-      </div>
+      </FadeIn>
 
-      {/* Cards Grid */}
       <div className="max-w-6xl mx-auto px-6 pb-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
+        <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" stagger={0.1}>
+          {services.map((service) => (
+            <StaggerItem key={service.id}>
             <div
-              key={index}
               onClick={() => setSelectedService(service)}
-              className="rounded-lg overflow-hidden shadow hover:shadow-xl transition-all duration-300 group cursor-pointer"
+              className="rounded-lg overflow-hidden shadow hover:shadow-xl transition-all duration-300 group cursor-pointer bg-white/90 backdrop-blur-sm"
             >
               {/* Image */}
               <div className="overflow-hidden h-52">
@@ -93,24 +72,33 @@ export default function Services() {
                   {service.description}
                 </p>
                 <div className="flex justify-between items-center">
-                  <p className="text-gold font-semibold text-lg">{service.price}</p>
+                  <p className="text-gold font-semibold text-lg">{formatPrice(service.price)}</p>
                   <span className="text-xs tracking-widest uppercase border border-gold text-gold px-3 py-1 rounded hover:bg-gold hover:text-black transition">
                     View
                   </span>
                 </div>
               </div>
             </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
 
-      {/* Modal Popup */}
+      <AnimatePresence>
       {selectedService && (
-        <div
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
           className="fixed inset-0 bg-black/80 z-50 flex justify-center items-center px-4"
           onClick={() => setSelectedService(null)}
         >
-          <div
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="bg-white rounded-xl max-w-lg w-full overflow-hidden shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
@@ -137,7 +125,7 @@ export default function Services() {
                   <h2 className="font-elegant text-2xl text-black">{selectedService.title}</h2>
                   <p className="text-gray-400 text-sm">{selectedService.duration}</p>
                 </div>
-                <span className="text-gold font-semibold text-xl">{selectedService.price}</span>
+                <span className="text-gold font-semibold text-xl">{formatPrice(selectedService.price)}</span>
               </div>
 
               <p className="text-gray-600 text-sm leading-relaxed mb-4">
@@ -166,10 +154,11 @@ export default function Services() {
                 Book This Service
               </Link>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
 
-    </div>
+    </PageShell>
   )
 }

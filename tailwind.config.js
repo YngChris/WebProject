@@ -4,9 +4,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        nude: "#E8C9A0",
-        blush: "#F4A7B9",
-        gold: "#C9A84C",
+        nude: "#D4B896",
+        blush: "#C9A87C",
+        gold: "#B76E79",
       },
       fontFamily: {
         elegant: ["Playfair Display", "serif"],

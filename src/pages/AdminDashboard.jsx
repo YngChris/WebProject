@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { AnimatePresence, motion } from "framer-motion"
 import { supabase } from "../supabaseClient"
+import { FadeIn, StaggerContainer, StaggerItem } from "../components/animations/AnimateIn"
+import PageShell from "../components/PageShell"
 
-const adminEmail = "chriiisybumpkin@gmail.com"
+const adminEmail = import.meta.env.VITE_ADMIN_EMAIL
 
 const statusColors = {
   pending: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
@@ -77,11 +80,19 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="bg-gray-950 min-h-screen text-white">
+    <PageShell variant="admin-dashboard" theme="dark" className="min-h-screen text-white">
 
       {/* Top Bar */}
-      <div className="bg-black border-b border-gray-800 px-8 py-4 flex justify-between items-center">
-        <h1 className="font-elegant text-2xl text-gold">PinkStudio Admin</h1>
+      <div className="bg-black/70 backdrop-blur-md border-b border-gold/15 px-8 py-4 flex justify-between items-center">
+        <div className="flex items-center gap-6">
+          <h1 className="font-elegant text-2xl text-gold">PinkStudio Admin</h1>
+          <button
+            onClick={() => navigate("/admin/settings")}
+            className="text-gray-400 text-sm hover:text-gold transition"
+          >
+            Settings
+          </button>
+        </div>
         <button
           onClick={handleLogout}
           className="text-gray-400 text-sm hover:text-gold transition"
@@ -92,20 +103,21 @@ export default function AdminDashboard() {
 
       <div className="px-6 py-8 max-w-7xl mx-auto">
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <StaggerContainer className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8" stagger={0.08}>
           {[
             { label: "Total Bookings", value: counts.all, color: "text-white" },
             { label: "Pending", value: counts.pending, color: "text-yellow-400" },
             { label: "Confirmed", value: counts.confirmed, color: "text-green-400" },
             { label: "Completed", value: counts.completed, color: "text-blue-400" },
           ].map((stat, i) => (
-            <div key={i} className="bg-black border border-gray-800 rounded-lg p-6">
-              <p className="text-gray-400 text-sm mb-1">{stat.label}</p>
-              <p className={`text-3xl font-bold ${stat.color}`}>{stat.value}</p>
-            </div>
+            <StaggerItem key={i}>
+              <div className="bg-black/55 backdrop-blur-sm border border-gold/15 rounded-lg p-6">
+                <p className="text-gray-400 text-sm mb-1">{stat.label}</p>
+                <p className={`text-3xl font-bold ${stat.color}`}>{stat.value}</p>
+              </div>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
 
         {/* Filter Tabs */}
         <div className="flex gap-2 mb-6 flex-wrap">
@@ -123,13 +135,29 @@ export default function AdminDashboard() {
           ))}
         </div>
 
-        {/* Bookings Table */}
+        <AnimatePresence mode="wait">
         {loading ? (
-          <div className="text-center text-gray-400 py-20">Loading bookings...</div>
+          <motion.div
+            key="loading"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="text-center text-gray-400 py-20"
+          >
+            Loading bookings...
+          </motion.div>
         ) : filtered.length === 0 ? (
-          <div className="text-center text-gray-400 py-20">No bookings found.</div>
+          <motion.div
+            key="empty"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="text-center text-gray-400 py-20"
+          >
+            No bookings found.
+          </motion.div>
         ) : (
-          <div className="overflow-x-auto">
+          <FadeIn key="table" className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-800 text-gray-400 text-left">
@@ -142,8 +170,14 @@ export default function AdminDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((booking) => (
-                  <tr key={booking.id} className="border-b border-gray-800/50 hover:bg-gray-900/50 transition">
+                {filtered.map((booking, i) => (
+                  <motion.tr
+                    key={booking.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.03, duration: 0.3 }}
+                    className="border-b border-gray-800/50 hover:bg-gray-900/50 transition"
+                  >
                     <td className="py-4 pr-4">
                       <p className="text-white font-medium">{booking.name}</p>
                       <p className="text-gray-400 text-xs">{booking.email}</p>
@@ -191,13 +225,14 @@ export default function AdminDashboard() {
                         </button>
                       </div>
                     </td>
-                  </tr>
+                  </motion.tr>
                 ))}
               </tbody>
             </table>
-          </div>
+          </FadeIn>
         )}
+        </AnimatePresence>
       </div>
-    </div>
+    </PageShell>
   )
 }

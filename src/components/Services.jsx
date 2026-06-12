@@ -1,22 +1,36 @@
-const services = [
-  {
-    title: "Classic Manicure",
-    description: "A timeless treatment including shaping, cuticle care, and polish.",
-    image: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/services/Eyelash.jpeg",
-  },
-  {
-    title: "Gel Nails",
-    description: "Long-lasting gel polish that stays flawless for up to 3 weeks.",
-    image: "https://pkbtkzzhnldtciedncna.supabase.co/storage/v1/object/public/services/Nail.jpeg",
-  },
-  {
-    title: "Acrylic Extensions",
-    description: "Full set of acrylic nails customized to your desired length and shape.",
-    image: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=400&h=300&fit=crop",
-  },
-]
+import { useEffect, useState } from "react"
+import { supabase } from "../supabaseClient"
+import { formatPrice } from "../utils/formatPrice"
 
 export default function Services() {
+  const [services, setServices] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      const { data, error } = await supabase
+        .from("services")
+        .select("*")
+        .order("created_at", { ascending: true })
+      
+      if (!error && data) {
+        setServices(data)
+      }
+      setLoading(false)
+    }
+    fetchServices()
+  }, [])
+
+  if (loading) {
+    return (
+      <section className="bg-white py-20 px-6">
+        <div className="text-center">
+          <p className="text-gray-400">Loading services...</p>
+        </div>
+      </section>
+    )
+  }
+
   return (
     <section className="bg-white py-20 px-6">
 
@@ -33,9 +47,9 @@ export default function Services() {
 
       {/* Cards Grid */}
       <div className="max-w-8x2 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {services.map((service, index) => (
+        {services.map((service) => (
           <div
-            key={index}
+            key={service.id}
             className="rounded-lg overflow-hidden shadow hover:shadow-xl transition-all duration-300 group"
           >
             {/* Image */}
@@ -55,7 +69,7 @@ export default function Services() {
               <p className="text-gray-500 text-sm mb-4 leading-relaxed">
                 {service.description}
               </p>
-              <p className="text-gold font-semibold text-lg">{service.price}</p>
+              <p className="text-gold font-semibold text-lg">{formatPrice(service.price)}</p>
             </div>
           </div>
         ))}
