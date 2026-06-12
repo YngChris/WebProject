@@ -37,7 +37,8 @@ export default function AdminLogin() {
       setError("You are not authorized to access this page.")
       return
     }
-
+    // ✅ ADD THIS (VERY IMPORTANT)
+    localStorage.setItem("isAdmin", "true")
     navigate("/admin/dashboard")
   }
 
