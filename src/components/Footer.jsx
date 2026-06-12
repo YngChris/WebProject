@@ -36,9 +36,6 @@ export default function Footer() {
 
       </StaggerContainer>
 
-      <FadeIn delay={0.2} className="relative z-10 border-t border-gray-800 mt-4 pt-3 text-center text-gray-300 text-sm">
-        © 2026 PinkStudio. All rights reserved.
-      </FadeIn>
     </footer>
   )
 }
