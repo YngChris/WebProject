@@ -4,9 +4,9 @@ import DoodleWallpaper from "./DoodleWallpaper"
 
 export default function Footer() {
   return (
-    <footer className="relative text-white py-1 px-0 overflow-hidden">
-      <DoodleWallpaper variant="home-footer" theme="dark" />
-      <StaggerContainer className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-40">
+    <footer className="relative text-white py-18 px-0 overflow-hidden">
+      <DoodleWallpaper variant="home-footer" theme="dark"/>
+      <StaggerContainer className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-40 py-5">
 
         <StaggerItem>
           <h4 className="font-elegant text-2x2 text-gold mb-4 font-bold">PinkStudio</h4>
@@ -36,7 +36,7 @@ export default function Footer() {
 
       </StaggerContainer>
 
-      <FadeIn delay={0.2} className="relative z-10 border-t border-gray-800 mt-4 pt-3 text-center text-gray-600 text-sm">
+      <FadeIn delay={0.2} className="relative z-10 border-t border-gray-800 mt-4 pt-3 text-center text-gray-300 text-sm">
         © 2026 PinkStudio. All rights reserved.
       </FadeIn>
     </footer>

@@ -32,6 +32,15 @@ export default function AdminSettings() {
   const [uploading, setUploading] = useState(false)
   const [selectedFile, setSelectedFile] = useState(null)
 
+  // Testimonials state
+  const [testimonials, setTestimonials] = useState([])
+  const [testimonialForm, setTestimonialForm] = useState({
+    name: "",
+    review: "",
+    rating: 5,
+  })
+  const [editingTestimonial, setEditingTestimonial] = useState(null)
+
   useEffect(() => {
     const checkAdmin = async () => {
       const { data: { user } } = await supabase.auth.getUser()
@@ -40,11 +49,12 @@ export default function AdminSettings() {
       } else {
         fetchServices()
         fetchGalleryImages()
+        fetchTestimonials()
       }
     }
     checkAdmin()
   }, [])
-
+  
   const fetchServices = async () => {
     const { data, error } = await supabase
       .from("services")
@@ -66,6 +76,15 @@ export default function AdminSettings() {
       setGalleryImages(data)
     }
   }
+
+  const fetchTestimonials = async () => {
+  const { data, error } = await supabase
+    .from("testimonials")
+    .select("*")
+    .order("created_at", { ascending: false })
+
+  if (!error && data) setTestimonials(data)
+}
 
   const handleServiceEdit = (service) => {
     setEditingService(service)
@@ -243,7 +262,58 @@ export default function AdminSettings() {
     await supabase.auth.signOut()
     navigate("/admin")
   }
+const handleTestimonialSave = async () => {
+  if (!testimonialForm.name || !testimonialForm.review) return
 
+  if (editingTestimonial) {
+    const { error } = await supabase
+      .from("testimonials")
+      .update({
+        name: testimonialForm.name,
+        review: testimonialForm.review,
+        rating: testimonialForm.rating,
+      })
+      .eq("id", editingTestimonial.id)
+
+    if (!error) {
+      fetchTestimonials()
+      setEditingTestimonial(null)
+      setTestimonialForm({ name: "", review: "", rating: 5 })
+    }
+  } else {
+    const { error } = await supabase
+      .from("testimonials")
+      .insert({
+        name: testimonialForm.name,
+        review: testimonialForm.review,
+        rating: testimonialForm.rating,
+      })
+
+    if (!error) {
+      fetchTestimonials()
+      setTestimonialForm({ name: "", review: "", rating: 5 })
+    }
+  }
+}
+
+const handleTestimonialEdit = (t) => {
+  setEditingTestimonial(t)
+  setTestimonialForm({
+    name: t.name,
+    review: t.review,
+    rating: t.rating,
+  })
+}
+
+const handleTestimonialDelete = async (id) => {
+  if (!window.confirm("Delete this testimonial?")) return
+  const { error } = await supabase
+    .from("testimonials")
+    .delete()
+    .eq("id", id)
+
+  if (!error) fetchTestimonials()
+}
   return (
     <PageShell variant="admin-settings" theme="dark" className="min-h-screen text-white">
 
@@ -287,6 +357,15 @@ export default function AdminSettings() {
                 : "bg-gray-800 text-gray-400 hover:bg-gray-700"}`}
           >
             Gallery
+          </button>
+          <button
+             onClick={() => setActiveTab("testimonials")}
+            className={`px-4 py-2 rounded text-sm capitalize transition
+              ${activeTab === "testimonials"
+                 ? "bg-gold text-black"
+                 : "bg-gray-800 text-gray-400 hover:bg-gray-700"}`}
+>
+            Testimonials
           </button>
         </div>
 
@@ -529,6 +608,108 @@ export default function AdminSettings() {
             </div>
           </motion.div>
         )}
+        {activeTab === "testimonials" && (
+          <div>
+          {/* Add/Edit Form */}
+          <div className="bg-black border border-gray-800 rounded-lg p-6 mb-8">
+            <h2 className="font-elegant text-xl text-gold mb-4">
+              {editingTestimonial ? "Edit Testimonial" : "Add New Testimonial"}
+            </h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Customer Name</label>
+                <input
+                  type="text"
+                  value={testimonialForm.name}
+                  onChange={(e) => setTestimonialForm({ ...testimonialForm, name: e.target.value })}
+                  placeholder="Ama Owusu"
+                  className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-gold focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Review</label>
+                  <textarea
+                    value={testimonialForm.review}
+                    onChange={(e) => setTestimonialForm({ ...testimonialForm, review: e.target.value })}
+                    placeholder="Write the customer's review here..."
+                    rows={4}
+                    className="w-full bg-gray-900 border border-gray-700 rounded px-4 py-2 text-white focus:border-gold focus:outline-none"
+                  />
+              </div>
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Rating</label>
+                <div className="flex gap-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      onClick={() => setTestimonialForm({ ...testimonialForm, rating: star })}
+                      className={`text-2xl transition ${
+                        star <= testimonialForm.rating ? "text-gold" : "text-gray-600"
+                      }`}
+                      >
+                      ★
+                    </button>
+        ))}
+          </div>
+        </div>
+      </div>
+      <div className="flex gap-4 mt-6">
+        <button
+          onClick={handleTestimonialSave}
+          disabled={!testimonialForm.name || !testimonialForm.review}
+          className="bg-gold text-black px-6 py-2 rounded font-semibold hover:opacity-90 transition disabled:opacity-50"
+        >
+          {editingTestimonial ? "Update Testimonial" : "Add Testimonial"}
+        </button>
+        {editingTestimonial && (
+          <button
+            onClick={() => {
+              setEditingTestimonial(null)
+              setTestimonialForm({ name: "", review: "", rating: 5 })
+            }}
+            className="bg-gray-700 text-white px-6 py-2 rounded hover:bg-gray-600 transition"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
+    </div>
+
+    {/* Testimonials List */}
+    <div className="bg-black border border-gray-800 rounded-lg p-6">
+      <h2 className="font-elegant text-xl text-gold mb-4">Current Testimonials</h2>
+      {testimonials.length === 0 ? (
+        <p className="text-gray-400">No testimonials yet. Add your first one above.</p>
+      ) : (
+        <div className="space-y-4">
+          {testimonials.map((t) => (
+            <div key={t.id} className="border border-gray-800 rounded p-4 flex justify-between items-start">
+              <div>
+                <p className="text-gold text-lg">{"★".repeat(t.rating)}{"☆".repeat(5 - t.rating)}</p>
+                <p className="text-white font-semibold mt-1">{t.name}</p>
+                <p className="text-gray-400 text-sm mt-1 italic">"{t.review}"</p>
+              </div>
+              <div className="flex gap-2 ml-4 shrink-0">
+                <button
+                  onClick={() => handleTestimonialEdit(t)}
+                  className="px-3 py-1 bg-blue-900/30 border border-blue-500/30 text-blue-400 rounded text-xs hover:bg-blue-900/60 transition"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleTestimonialDelete(t.id)}
+                  className="px-3 py-1 bg-red-900/30 border border-red-500/30 text-red-400 rounded text-xs hover:bg-red-900/60 transition"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+)}
         </AnimatePresence>
 
       </div>

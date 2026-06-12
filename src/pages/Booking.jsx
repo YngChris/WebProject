@@ -97,12 +97,6 @@ export default function Booking() {
     try {
       await emailjs.send(
         "service_f8miyin",
-        "template_t6magzb",
-        templateParams,
-        "ryrpoSP2GGj1MADwF"
-      )
-      await emailjs.send(
-        "service_f8miyin",
         "template_b4g50hm",
         templateParams,
         "ryrpoSP2GGj1MADwF"
@@ -133,7 +127,7 @@ export default function Booking() {
         </FadeInOnMount>
         <FadeInOnMount delay={0.4}>
           <div className="bg-green-900/30 border border-green-500/30 text-green-400 text-sm px-4 py-2 rounded mb-6">
-            ✓ Confirmation email sent to {formData.email}
+            ✓ Details sent to Admin
           </div>
         </FadeInOnMount>
         <FadeInOnMount delay={0.5}>
